@@ -20,6 +20,7 @@ bool cuartoCargado;
 room r;
 int NumTri = 0;
 source s;
+unsigned int variable = GL_LINE;
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -121,32 +122,33 @@ int main()
     int contadorIco = 0;
     int indiceIco = 0;
     
+    
 
 
     while (contradorVertices < 108) {
         for (int i = 0; i < r.NP; i++) {
             for (int j = 0; j < r.p[i].NT; j++) {
-                vertices1[contradorVertices] = r.p[i].t[j].p0.x * 0.1;
+                vertices1[contradorVertices] = r.p[i].t[j].p0.x ;
                 contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p0.y * 0.1;
+                vertices1[contradorVertices] = r.p[i].t[j].p0.y ;
                 contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p0.z * 0.1;
-                contradorVertices++;
-
-
-                vertices1[contradorVertices] = r.p[i].t[j].p1.x * 0.1;
-                contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p1.y * 0.1;
-                contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p1.z * 0.1;
+                vertices1[contradorVertices] = r.p[i].t[j].p0.z ;
                 contradorVertices++;
 
 
-                vertices1[contradorVertices] = r.p[i].t[j].p2.x * 0.1;
+                vertices1[contradorVertices] = r.p[i].t[j].p1.x;
                 contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p2.y * 0.1;
+                vertices1[contradorVertices] = r.p[i].t[j].p1.y;
                 contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p2.z * 0.1;
+                vertices1[contradorVertices] = r.p[i].t[j].p1.z;
+                contradorVertices++;
+
+
+                vertices1[contradorVertices] = r.p[i].t[j].p2.x;
+                contradorVertices++;
+                vertices1[contradorVertices] = r.p[i].t[j].p2.y ;
+                contradorVertices++;
+                vertices1[contradorVertices] = r.p[i].t[j].p2.z ;
                 contradorVertices++;
 
             }
@@ -157,27 +159,27 @@ int main()
   
     while (contadorIco < 180 && indiceIco < 20) {
 
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.x * 0.1;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.x ;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.y * 0.1;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.y ;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.z * 0.1;
-        contadorIco++;
-
-
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.x * 0.1;
-        contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.y * 0.1;
-        contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.z * 0.1;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.z ;
         contadorIco++;
 
 
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.x * 0.1;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.x ;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.y * 0.1;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.y ;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.z * 0.1;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.z ;
+        contadorIco++;
+
+
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.x ;
+        contadorIco++;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.y ;
+        contadorIco++;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.z ;
         contadorIco++;
         indiceIco++;
 
@@ -207,13 +209,13 @@ int main()
 
     point puntoDeOrigen;
 
-    puntoDeOrigen.x = arrayreflecciones[1].r[0].x * 0.1;
-    puntoDeOrigen.y = arrayreflecciones[1].r[0].y * 0.1;
-    puntoDeOrigen.z = arrayreflecciones[1].r[0].z * 0.1;
+    puntoDeOrigen.x = arrayreflecciones[1].r[0].x ;
+    puntoDeOrigen.y = arrayreflecciones[1].r[0].y ;
+    puntoDeOrigen.z = arrayreflecciones[1].r[0].z ;
 
-    puntoDePrueba.x = arrayreflecciones[1].r[1].x * 0.1;
-    puntoDePrueba.y = arrayreflecciones[1].r[1].y * 0.1;
-    puntoDePrueba.z = arrayreflecciones[1].r[1].z * 0.1;
+    puntoDePrueba.x = arrayreflecciones[1].r[1].x ;
+    puntoDePrueba.y = arrayreflecciones[1].r[1].y ;
+    puntoDePrueba.z = arrayreflecciones[1].r[1].z ;
 
 
     // first, configure the cube's VAO (and VBO)
@@ -298,8 +300,8 @@ int main()
         cubo.setMat4("model", model);
 
         // render the cube
+        glPolygonMode(GL_FRONT_AND_BACK, variable);
         glBindVertexArray(cubeVAO);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
@@ -311,19 +313,22 @@ int main()
         glm::mat4 model2 = glm::mat4(1.0f);
         icosaedro.setMat4("model", model2);
 
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glBindVertexArray(cubeVAO2);
         glDrawArrays(GL_TRIANGLES, 0, 60);
 
 
         if ((puntoDeOrigen.distancia(puntoDePrueba) * (glfwGetTime() - tiempo1) * SPEED) >= puntoDeOrigen.distancia(puntoDePrueba)) {
 
-            tiempo1 = glfwGetTime();
+            
             puntoDeOrigen = puntoDePrueba;
 
             contadorTemporal++;
-            puntoDePrueba.x = arrayreflecciones[1].r[contadorTemporal].x * 0.1;
-            puntoDePrueba.y = arrayreflecciones[1].r[contadorTemporal].y * 0.1;
-            puntoDePrueba.z = arrayreflecciones[1].r[contadorTemporal].z * 0.1;
+            puntoDePrueba.x = arrayreflecciones[1].r[contadorTemporal].x ;
+            puntoDePrueba.y = arrayreflecciones[1].r[contadorTemporal].y ;
+            puntoDePrueba.z = arrayreflecciones[1].r[contadorTemporal].z ;
+
+            tiempo1 = glfwGetTime();
         };
 
 
@@ -331,12 +336,14 @@ int main()
 
         //model = glm::translate(model, glm::vec3(puntoDeOrigen.x + ((puntoDePrueba.x- puntoDeOrigen.x) * (glfwGetTime() - tiempo1) * SPEED), puntoDeOrigen.y + ((puntoDePrueba.y- puntoDeOrigen.y) * (glfwGetTime() - tiempo1) * SPEED), puntoDeOrigen.z + ((puntoDePrueba.z- puntoDeOrigen.z) * (glfwGetTime() - tiempo1) * SPEED)));
         model = glm::translate(model, glm::vec3(puntoDeOrigen.x + ((puntoDePrueba.x - puntoDeOrigen.x)) * (glfwGetTime() - tiempo1) * SPEED, puntoDeOrigen.y + ((puntoDePrueba.y - puntoDeOrigen.y)) * (glfwGetTime() - tiempo1) * SPEED, puntoDeOrigen.z + ((puntoDePrueba.z - puntoDeOrigen.z) * (glfwGetTime() - tiempo1)) * SPEED));
+        
         model = glm::scale(model, glm::vec3(0.01f));
         rayo.use();
         rayo.setMat4("model",model);
         rayo.setMat4("projection", projection);
         rayo.setVec3("objectColor", 0.0f, 1.0f, 0.0f);
         rayo.setMat4("view", view);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 60);
 
@@ -377,7 +384,12 @@ void processInput(GLFWwindow* window)
         camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
-
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+        variable = GL_POINT;
+    if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
+        variable = GL_FILL;
+    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+        variable = GL_LINE;
     //If I want to stay in ground level (xz plane)
     //camera.Position.y = 0.0f;
 
