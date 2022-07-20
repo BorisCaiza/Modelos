@@ -18,9 +18,10 @@
 //VariablesGlobales
 bool cuartoCargado;
 room r;
-int NumTri = 0;
 source s;
+int indiceRayo = 0;
 unsigned int variable = GL_LINE;
+unsigned int variable2 = GL_LINE;
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -111,28 +112,28 @@ int main()
     Shader cubo("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
     Shader icosaedro("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
     Shader rayo("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
-   
+    Shader rayo2("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
+
     laodRoom();
 
-
- 
     float vertices1[108];
     int contradorVertices = 0;
     float vertices2[180];
     int contadorIco = 0;
     int indiceIco = 0;
-    
-    
+  
+
+
 
 
     while (contradorVertices < 108) {
         for (int i = 0; i < r.NP; i++) {
             for (int j = 0; j < r.p[i].NT; j++) {
-                vertices1[contradorVertices] = r.p[i].t[j].p0.x ;
+                vertices1[contradorVertices] = r.p[i].t[j].p0.x;
                 contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p0.y ;
+                vertices1[contradorVertices] = r.p[i].t[j].p0.y;
                 contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p0.z ;
+                vertices1[contradorVertices] = r.p[i].t[j].p0.z;
                 contradorVertices++;
 
 
@@ -146,9 +147,9 @@ int main()
 
                 vertices1[contradorVertices] = r.p[i].t[j].p2.x;
                 contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p2.y ;
+                vertices1[contradorVertices] = r.p[i].t[j].p2.y;
                 contradorVertices++;
-                vertices1[contradorVertices] = r.p[i].t[j].p2.z ;
+                vertices1[contradorVertices] = r.p[i].t[j].p2.z;
                 contradorVertices++;
 
             }
@@ -156,31 +157,33 @@ int main()
 
 
     }
-  
+
     while (contadorIco < 180 && indiceIco < 20) {
 
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.x ;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.x;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.y ;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.y;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.z ;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p0.z;
         contadorIco++;
 
 
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.x ;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.x;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.y ;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.y;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.z ;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p1.z;
         contadorIco++;
 
 
         vertices2[contadorIco] = s.IcoFace[indiceIco].p2.x ;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.y ;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.y;
         contadorIco++;
         vertices2[contadorIco] = s.IcoFace[indiceIco].p2.z ;
         contadorIco++;
+
+
         indiceIco++;
 
     }
@@ -188,34 +191,64 @@ int main()
 
 
     s.createRays(20);
-   // r.RayTracing(s.p, s.Rays, s.NRAYS); 
 
 
-    point o;
 
 
-    reflection* arrayreflecciones;
-
-    arrayreflecciones = r.RayTracing(s.p, s.Rays, s.NRAYS);
-
-   /* for (int i = 0; i < 200; i++) {
-        printf("punto de golpe: x: %f, y: %f, z: %f\n", arrayreflecciones[1].r[i].x, arrayreflecciones[1].r[i].y, arrayreflecciones[1].r[i].z);
-    }*/
-
-    reflection arrayDePuntosDeChoque = arrayreflecciones[1];
+    reflection* arrayreflecciones = r.RayTracing(s.p, s.Rays, s.NRAYS);
 
 
-    point puntoDePrueba;
 
-    point puntoDeOrigen;
+    point destino;
+    point origen;
 
-    puntoDeOrigen.x = arrayreflecciones[1].r[0].x ;
-    puntoDeOrigen.y = arrayreflecciones[1].r[0].y ;
-    puntoDeOrigen.z = arrayreflecciones[1].r[0].z ;
+  //  origen = NULL;
+   // destino = NULL;
 
-    puntoDePrueba.x = arrayreflecciones[1].r[1].x ;
-    puntoDePrueba.y = arrayreflecciones[1].r[1].y ;
-    puntoDePrueba.z = arrayreflecciones[1].r[1].z ;
+    /*
+    origen[0].x = 0;
+    origen[0].y = 0;
+    origen[0].z = 0;
+
+    origen[1].x = 0;
+    origen[1].y = 0;
+    origen[1].z = 0;
+
+
+    destino[0].x = 0;
+    destino[0].y = 0;
+    destino[0].z = 0;
+
+    destino[1].x = 0;
+    destino[1].y = 0;
+    destino[1].z = 0;
+
+    */
+
+
+  
+    
+        origen.x = arrayreflecciones[indiceRayo].r[0].x;
+        origen.y = arrayreflecciones[indiceRayo].r[0].y;
+        origen.z = arrayreflecciones[indiceRayo].r[0].z;
+
+
+        destino.x = arrayreflecciones[indiceRayo].r[1].x;
+        destino.y = arrayreflecciones[indiceRayo].r[1].y;
+        destino.z = arrayreflecciones[indiceRayo].r[1].z;
+    
+
+   
+    
+    /*
+    printf("El rayo es el %f \n", destino.x);
+    printf("El rayo es el %f \n", destino.y);
+    printf("El rayo es el %f \n", destino.z);
+    printf("-------------------------------\n");
+    */
+
+
+
 
 
     // first, configure the cube's VAO (and VBO)
@@ -252,9 +285,9 @@ int main()
 
 
 
-   
-    double tiempo1 = 0;
-    int contadorTemporal = 0;
+
+    double tiempoAux = 0;
+    int contadorPunto = 1;
 
 
     // render loop
@@ -313,31 +346,30 @@ int main()
         glm::mat4 model2 = glm::mat4(1.0f);
         icosaedro.setMat4("model", model2);
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glPolygonMode(GL_FRONT_AND_BACK, variable2);
         glBindVertexArray(cubeVAO2);
         glDrawArrays(GL_TRIANGLES, 0, 60);
 
+        double distancia = origen.distancia(destino);
+        double tiempoVuelo = glfwGetTime() - tiempoAux;
+        double distanciaAux = tiempoVuelo * SPEED;
+        
 
-        if ((puntoDeOrigen.distancia(puntoDePrueba) * (glfwGetTime() - tiempo1) * SPEED) >= puntoDeOrigen.distancia(puntoDePrueba)) {
-
-            
-            puntoDeOrigen = puntoDePrueba;
-
-            contadorTemporal++;
-            puntoDePrueba.x = arrayreflecciones[1].r[contadorTemporal].x ;
-            puntoDePrueba.y = arrayreflecciones[1].r[contadorTemporal].y ;
-            puntoDePrueba.z = arrayreflecciones[1].r[contadorTemporal].z ;
-
-            tiempo1 = glfwGetTime();
+        if ((distanciaAux) >= distancia) {
+            origen = destino;
+            contadorPunto++;
+            destino.x = arrayreflecciones[indiceRayo].r[contadorPunto].x;
+            destino.y = arrayreflecciones[indiceRayo].r[contadorPunto].y;
+            destino.z = arrayreflecciones[indiceRayo].r[contadorPunto].z;
+            tiempoAux = glfwGetTime();  
         };
 
 
 
 
-        //model = glm::translate(model, glm::vec3(puntoDeOrigen.x + ((puntoDePrueba.x- puntoDeOrigen.x) * (glfwGetTime() - tiempo1) * SPEED), puntoDeOrigen.y + ((puntoDePrueba.y- puntoDeOrigen.y) * (glfwGetTime() - tiempo1) * SPEED), puntoDeOrigen.z + ((puntoDePrueba.z- puntoDeOrigen.z) * (glfwGetTime() - tiempo1) * SPEED)));
-        model = glm::translate(model, glm::vec3(puntoDeOrigen.x + ((puntoDePrueba.x - puntoDeOrigen.x)) * (glfwGetTime() - tiempo1) * SPEED, puntoDeOrigen.y + ((puntoDePrueba.y - puntoDeOrigen.y)) * (glfwGetTime() - tiempo1) * SPEED, puntoDeOrigen.z + ((puntoDePrueba.z - puntoDeOrigen.z) * (glfwGetTime() - tiempo1)) * SPEED));
         
-        model = glm::scale(model, glm::vec3(0.01f));
+        model = glm::translate(model, glm::vec3(origen.x + ((destino.x - origen.x)) * (glfwGetTime() - tiempoAux) * (SPEED/ distancia), origen.y + ((destino.y - origen.y)) * (glfwGetTime() - tiempoAux) * (SPEED/ distancia), origen.z + ((destino.z - origen.z) * (glfwGetTime() - tiempoAux)) * (SPEED/ distancia)));
+        model = glm::scale(model, glm::vec3(0.03f));
         rayo.use();
         rayo.setMat4("model",model);
         rayo.setMat4("projection", projection);
@@ -390,6 +422,20 @@ void processInput(GLFWwindow* window)
         variable = GL_FILL;
     if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
         variable = GL_LINE;
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+        variable2 = GL_POINT;
+    if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS)
+        variable2 = GL_FILL;
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+        variable2 = GL_LINE;
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+        indiceRayo = 1;
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+        indiceRayo = 2;
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+        indiceRayo = 3;
+    if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
+        indiceRayo = 0;
     //If I want to stay in ground level (xz plane)
     //camera.Position.y = 0.0f;
 

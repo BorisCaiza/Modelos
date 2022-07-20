@@ -3,7 +3,20 @@
 #ifndef HeaderH
 #define HeaderH
 //---------------------------------------------------------------------------
+
+/*
+#define xy 0
+#define xz 1
+#define yz 2
+#define NUM_COLORS 4 
+#define PI 3.14
+#define SPEED 1.5
+#define V_SON 340.0
+#define MaxNPoints 200
+*/
+
 #include "Definitions.h"
+
 #include <stdio.h>
 #include <math.h>
 using namespace std;
