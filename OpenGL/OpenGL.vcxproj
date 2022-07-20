@@ -149,7 +149,6 @@
     <ClCompile Include="Source11.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\2022-A\Modelos\Deberes Gabriel Vivas\Nueva carpeta (2)\Ambiente3D3\Ambiente3D_estable\Ambiente3D\Definitions.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="Header.h" />
   </ItemGroup>

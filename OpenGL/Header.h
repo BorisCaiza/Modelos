@@ -3,22 +3,16 @@
 #ifndef HeaderH
 #define HeaderH
 //---------------------------------------------------------------------------
+#include <stdio.h>
+#include <math.h>
 
-/*
 #define xy 0
 #define xz 1
 #define yz 2
-#define NUM_COLORS 4 
+#define SPEED 5
 #define PI 3.14
-#define SPEED 1.5
-#define V_SON 340.0
 #define MaxNPoints 200
-*/
 
-#include "Definitions.h"
-
-#include <stdio.h>
-#include <math.h>
 using namespace std;
 
 class color {
@@ -35,180 +29,62 @@ public:
     void operator=(double f) {  //same value to R, G and B
         R = G = B = f;
     };
-
-    void getHeatMapColor(double value) { //Valor entre 0 y 1
-        color arr_col[NUM_COLORS];//4 colores base para el mapa de calor
-
-        //Color 0: Helado/azul {0,0,1}
-        arr_col[0].R = 0.5;
-        arr_col[0].G = 0.5;
-        arr_col[0].B = 1;
-
-        //Color 1 Frio/verde {0,1,0}
-        arr_col[1].R = 0.5;
-        arr_col[1].G = 1;
-        arr_col[1].B = 0.5;
-
-        //Color 2 Tibio/amarillo {1,1,0}
-        arr_col[2].R = 1;
-        arr_col[2].G = 1;
-        arr_col[2].B = 0.5;
-
-        //Color 3 Caliente/rojo {1,0,0}
-        arr_col[3].R = 1;
-        arr_col[3].G = 0.5;
-        arr_col[3].B = 0.5;
-
-        int ind1;
-        int ind2;
-        double fracIntermedia = 0;
-
-        if (value <= 0)
-            ind1 = ind2 = 0;
-        else if (value >= 1)
-            ind1 = ind2 = 3;
-        else {
-            value = value * (NUM_COLORS - 1);
-            ind1 = floor(value);
-            ind2 = ind1 + 1;
-            fracIntermedia = value - double(ind1);
-        }
-        R = (arr_col[ind2].R - arr_col[ind1].R) * fracIntermedia + arr_col[ind1].R;
-        G = (arr_col[ind2].G - arr_col[ind1].G) * fracIntermedia + arr_col[ind1].G;
-        B = (arr_col[ind2].B - arr_col[ind1].B) * fracIntermedia + arr_col[ind1].B;
-    };
-
-
 };
+
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-class vector1 {
+class vectorO {
 public:
     double x, y, z;
 
-    vector1 operator+(vector1 v2) { //suma de vectores
-        vector1 v1;
+    vectorO operator+(vectorO v2) { //suma de vectores
+        vectorO v1;
         v1.x = x + v2.x;
         v1.y = y + v2.y;
         v1.z = z + v2.z;
         return v1;
     };
-    vector1 operator-(vector1 v2) { //resta de vectores
-        vector1 v1;
+    vectorO operator-(vectorO v2) { //resta de vectores
+        vectorO v1;
         v1.x = x - v2.x;
         v1.y = y - v2.y;
         v1.z = z - v2.z;
         return v1;
     };
-    vector1 operator*(double f) { //multiplicacion por escalar
-        vector1 v;
+    vectorO operator*(double f) { //multiplicacion por escalar
+        vectorO v;
         v.x = x * f;
         v.y = y * f;
         v.z = z * f;
         return v;
     };
-    vector1 operator/(double f) { //division por escaalr
-        vector1 v;
+    vectorO operator/(double f) { //division por escaalr
+        vectorO v;
         v.x = x / f;
         v.y = y / f;
         v.z = z / f;
         return v;
     };
-    double operator*(vector1 v) { //produto punto entre vectores
+    double operator*(vectorO v) { //produto punto entre vectores
         double f;
         f = x * v.x + y * v.y + z * v.z;
         return f;
     };
 
-    vector1 operator/(vector1 v2) { //produto cruz
-        vector1 v1;
+    vectorO operator/(vectorO v2) { //produto cruz
+        vectorO v1;
         v1.x = y * v2.z - z * v2.y;
         v1.y = -x * v2.z + z * v2.x;
         v1.z = x * v2.y - y * v2.x;
         return v1;
     };
 
-
-    /*
-    void operator*=(double f) {
-        x *= f;
-        y *= f;
-        z *= f;
-    };
-    */
-
-
-    /*
-    void operator/=(double f) {
-        x /= f;
-        y /= f;
-        z /= f;
-    };
-    */
-
     void operator=(double f) {  //mismo valor para x, y , z
         x = y = z = f;
     };
 
-    /*
-    bool operator==(vector v) { //igualdade entre vetores
-        if (x == v.x && y == v.y && z == v.z)
-            return 1;
-        else
-            return 0;
-    };
-    */
-
-    /*
-    bool operator!=(vector v) { //desigualdade entre vetores
-        if (x == v.x && y == v.y && z == v.z)
-            return 0;
-        else
-            return 1;
-    };
-    */
-
-    /*
-    double Angle(vector v) { //�ngulo entre dois vetores
-        double angle, f;
-        f = x * v.x + y * v.y + z * v.z; // produto escalar
-        f /= sqrt(x * x + y * y + z * z);
-        f /= sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-        angle = acos(f) / M_PI * 180;
-        return angle;
-    };
-    */
-    /*
-    double Max(void) { //valor m�ximo entre as coordenadas
-        double max;
-        if (x > y) {
-            max = x;
-        }
-        else {
-            max = y;
-        }
-        if (z > max) {
-            max = z;
-        }
-        return max;
-    };
-    double Min(void) { //valor minimo entre as coordenadas
-        double min;
-        if (x < y) {
-            min = x;
-        }
-        else {
-            min = y;
-        }
-        if (z < min) {
-            min = z;
-        }
-        return min;
-    };
-    */
-
-    vector1 Abs(void) { //valor absoluto das coordenadas
-        vector1 v;
+    vectorO Abs(void) { //valor absoluto das coordenadas
+        vectorO v;
         v.x = fabs(x);
         v.y = fabs(y);
         v.z = fabs(z);
@@ -219,9 +95,9 @@ public:
         return sqrt(x * x + y * y + z * z);
     };
 
-    vector1 Unitary() {
+    vectorO Unitary() {
         double m;
-        vector1 u;
+        vectorO u;
         u.x = x;
         u.y = y;
         u.z = z;
@@ -237,11 +113,9 @@ public:
 
         return u;
     }
-
-
-
 };
-//---------------------------------------------------------------------------
+
+
 class point {
 public:
     double x, y, z;
@@ -252,13 +126,14 @@ public:
         z = 0;
     };
 
-    point operator+(vector1 v) { //translado de un vector
+    point operator+(vectorO v) { //translado de un vector
         point p;
         p.x = x + v.x;
         p.y = y + v.y;
         p.z = z + v.z;
         return p;
     };
+
     point operator+(point p2) { //suma de dos puntos
         point p1;
         p1.x = x + p2.x;
@@ -266,18 +141,9 @@ public:
         p1.z = z + p2.z;
         return p1;
     };
-    /*
-    point operator-(point p) { //resta de dos puntos
-        point v;
-        v.x = x - p.x;
-        v.y = y - p.y;
-        v.z = z - p.z;
-        return v;
-    };
-    */
 
-    vector1 operator-(point p) { //resta de dos puntos
-        vector1 v;
+    vectorO operator-(point p) { //resta de dos puntos
+        vectorO v;
         v.x = x - p.x;
         v.y = y - p.y;
         v.z = z - p.z;
@@ -322,39 +188,6 @@ public:
         z = 0;
     };
 
-    /*
-    double Max(void) { //valor maximo entre las coordenadas
-        double max;
-        if (x > y) {
-            max = x;
-        }
-        else {
-            max = y;
-        }
-        if (z > max) {
-            max = z;
-        }
-        return max;
-    };
-    */
-
-    /*
-    double Min(void) { //valor minimo entre as coordenadas
-        double min;
-        if (x < y) {
-            min = x;
-        }
-        else {
-            min = y;
-        }
-        if (z < min) {
-            min = z;
-        }
-        return min;
-    };
-    */
-
-
     point Abs(void) { //valor absoluto das coordenadas
         point v;
         v.x = fabs(x);
@@ -367,18 +200,9 @@ public:
         return sqrt((p2.x - x) * (p2.x - x) + (p2.y - y) * (p2.y - y) + (p2.z - z) * (p2.z - z));
     };
 
-    /*
-    vector restaPuntos(point b) {
-        vector v;
-        v.x = x - b.x;
-        v.y = y - b.y;
-        v.z = z - b.z;
-        return v;
-    }
-    */
-
 };
-//---------------------------------------------------------------------------
+
+
 class triangle {
 public:
     point p0, p1, p2, bc; //triangle Points
@@ -420,34 +244,22 @@ public:
         bc = (p0 + p1 + p2) / 3;
     };
 
-    /*
-    double solidAngle(point b) {
-        double area = 0.0, d = 0.2;
-        triangle t;
-        vector v0, v1, v2;
-        v0 = p0 - b;
-        v1 = p1 - b;
-        v2 = p2 - b;
-        v0 = v0 / v0.Module();
-        v1 = v1 / v1.Module();
-        v2 = v2 / v2.Module();
-        t.p0 = b + (v0 * d);
-        t.p1 = b + (v1 * d);
-        t.p2 = b + (v2 * d);
-        area = t.TriangleArea();
-        return area;
-    };
-    */
-
     double TriangleArea() {
         double a;
-        vector1 v = (p1 - p0) / (p2 - p0);
+        vectorO v = (p1 - p0) / (p2 - p0);
         a = 0.5 * v.Module();
         return a;
     };
 
+    vectorO TriangleNormal() {
+        vectorO n;
+        vectorO v = (p1 - p0) / (p2 - p0);
+        n = v.Unitary();
+        return n;
+    };
+
     void CalculateProjection() {
-        vector1 n;
+        vectorO n;
         double x0, y0, z0, x1, y1, z1, x2, y2, z2;
         x0 = p0.x;
         y0 = p0.y;
@@ -462,30 +274,30 @@ public:
         n.x = n.x * n.x;
         n.y = n.y * n.y;
         n.z = n.z * n.z;
-        if ((n.x >= n.y) && (n.x >= n.z)) {                        //proje��o yz
+        if ((n.x >= n.y) && (n.x >= n.z)) {
             Projection = yz;
             a0 = 1 / (-y1 * z0 + y2 * z0 + y0 * z1 - y2 * z1 - y0 * z2 + y1 * z2 + 0.000001);
         }
-        if ((n.y >= n.x) && (n.y >= n.z)) {                        //proje��o xz
+        if ((n.y >= n.x) && (n.y >= n.z)) {
             Projection = xz;
             a0 = 1 / (-x1 * z0 + x2 * z0 + x0 * z1 - x2 * z1 - x0 * z2 + x1 * z2 + 0.000001);
         }
-        if ((n.z >= n.x) && (n.z >= n.y)) {                        //proje��o xy
+        if ((n.z >= n.x) && (n.z >= n.y)) {
             Projection = xy;
             a0 = 1 / (-x1 * y0 + x2 * y0 + x0 * y1 - x2 * y1 - x0 * y2 + x1 * y2 + 0.000001);
         }
     };
 };
-//---------------------------------------------------------------------------
+
+
 class plane {
 public:
-
-    color       Color;                  //color RGB
-    int         NP;                     //Number of Points
-    point* p;                     //plane Points
-    int         NT;                     //Number of Triangles
-    triangle* t;                     //plane Triangles
-    vector1      n;                      //Normal vector
+    color Color;
+    int NP;
+    point* p;
+    int NT;
+    triangle* t;
+    vectorO n;
 
     plane() {
         int P, T;
@@ -569,56 +381,6 @@ public:
         }
     };
 
-    /*
-    void MoreTriangle(int nd) { //Genera m�s tri�ngulos a partir de una malla con nd divisiones
-        if (NP == 4) {
-            int i, j, cont;   //Contadores
-            //matPuntos mp;   //Matriz din�mica de puntos
-            vector v1, v2;  //vectores directores en cada lado del cuadrado
-            double m1, m2;  //m�dulos de los vectores directores
-            double p1, p2;  //tama�o del paso
-            v1 = p[1] - p[0];   //vector director 1 dgenerado por el v�rtice 1 y 2
-            v2 = p[2] - p[1];   //vector director 2 generado por el v�rtice 2 y 3
-            m1 = v1.Module(); //m�dulo del vector director 1
-            m2 = v2.Module(); //m�dulo del vector director 2
-            v1 = v1 / m1;       //vector director 1 unitario
-            v2 = v2 / m2;       //vector director 2 unitario
-            p1 = m1 / nd;       //paso 1
-            p2 = m2 / nd;       //paso 2
-            mp.init(nd + 1, nd + 1);//Lleno la matriz de puntos, seg�n los v�rtices del cuadrado inicial.
-            for (i = 0; i <= nd; i++) {
-                mp.p[i][0] = p[0] + (v1 * (p1 * i));
-                for (j = 1; j <= nd; j++)
-                    mp.p[i][j] = mp.p[i][0] + (v2 * (p2 * j));
-            }
-            plane* a_p = new plane[nd * nd];
-            cont = 0;
-            for (i = 0; i < nd; i++) {
-                for (j = 0; j < nd; j++) {
-                    a_p[cont].Clear();
-                    a_p[cont].NewPoints(4);
-                    a_p[cont].p[0] = mp.p[i][j];
-                    a_p[cont].p[1] = mp.p[i + 1][j];
-                    a_p[cont].p[2] = mp.p[i + 1][j + 1];
-                    a_p[cont].p[3] = mp.p[i][j + 1];
-                    a_p[cont].PointGenTriangle();
-                    cont++;
-                }
-            }
-            cont = 0;
-            NewTriangle(2 * nd * nd);
-            for (int i = 0; i < nd * nd; i++) {
-                for (int j = 0; j < a_p[i].NT; j++) {
-                    t[cont] = a_p[i].t[j];
-                    cont++;
-                }
-            }
-            delete a_p;
-            a_p = NULL;
-        }
-    };
-    */
-
     void PointGenTriangle() { //Genera 2 triangulos a partir de los v�rtices de un cuadrado
         NewTriangle(NP - 2);
         int i = 1;
@@ -653,201 +415,31 @@ public:
         t = NULL;
         n = 0;
     };
-    /*
-    bool IsConvex() {
-        int n;
-        vector u, v;
-        double ang;
-        for (int n = 1; n < NP - 1; n++) { // ficam faltando 2 pontos (primeiro e ultimo)
-            u = p[n - 1] - p[n];
-            v = p[n + 1] - p[n];
-            ang = u.Angle(v);
-            if (ang > 180)return false;
-        }
-        return true;
-    }
-    */
-
 
 };
 
-class receptor {
-public:
-    point p;                //Posición
-    double ReceptionRadius; //Radio de recepción
-    double* eR;             //Energía recibida en el receptor
-    int NIt;                //Instantes de tiempo considerados
-    double VisualRadius;    //Radio visual (tamaño en pantalla)
-    color Color;            //Color del receptor
-    point SphereFace[32][4];//Representación gráfica del receptor
-
-    receptor() {
-        p = 0.0;
-        eR = NULL;
-        NIt = 0;
-
-        Color.R = 0.5;
-        Color.G = 1.0;
-        Color.B = 0.5;
-
-        VisualRadius = 0.3;
-        ReceptionRadius = 0.3;
-
-        //Creating Sphere
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 8; j++) {
-                SphereFace[8 * i + j][0].x = sin(i * PI / 4) * cos((j + 1) * PI / 4);
-                SphereFace[8 * i + j][0].y = sin(i * PI / 4) * sin((j + 1) * PI / 4);
-                SphereFace[8 * i + j][0].z = cos(i * PI / 4);
-                SphereFace[8 * i + j][1].x = sin(i * PI / 4) * cos(j * PI / 4);
-                SphereFace[8 * i + j][1].y = sin(i * PI / 4) * sin(j * PI / 4);
-                SphereFace[8 * i + j][1].z = cos(i * PI / 4);
-                SphereFace[8 * i + j][2].x = sin((i + 1) * PI / 4) * cos(j * PI / 4);
-                SphereFace[8 * i + j][2].y = sin((i + 1) * PI / 4) * sin(j * PI / 4);
-                SphereFace[8 * i + j][2].z = cos((i + 1) * PI / 4);
-                SphereFace[8 * i + j][3].x = sin((i + 1) * PI / 4) * cos((j + 1) * PI / 4);
-                SphereFace[8 * i + j][3].y = sin((i + 1) * PI / 4) * sin((j + 1) * PI / 4);
-                SphereFace[8 * i + j][3].z = cos((i + 1) * PI / 4);
-            }
-        }
-    };
-
-    ~receptor() {/*
-        deleteTimeSamples();
-    */
-    };
-
-    void Clear() {
-        deleteTimeSamples();
-    };
-
-    void createTimeSamples(int dSim) {
-        deleteTimeSamples();
-        NIt = dSim;
-        eR = new double[NIt];
-        for (int i = 0; i < NIt; i++) {
-            eR[i] = 0.0;
-        }
-    };
-
-    void deleteTimeSamples() {
-        if (NIt > 0) {
-            delete eR;
-            eR = NULL;
-            NIt = 0;
-        }
-    };
-
-    double IntersectionDistance(vector1 n, point p, vector1 u, point o) {
-        /*JFLN:
-            vector n is the normal vector of the plane
-            point p is one of the vertex of the plane
-            vector u is the ray
-            point o is the initial position of the ray
-        */
-        double d, m;
-        m = n * u;
-        //JFLN: Has to have an error tolerance
-        if (m == 0)
-            return -1;
-        d = (n * (p - o)) / m;
-        return d;
-    };
-
-    double Module(vector1 v) { //JFLN: Returns the vector's module
-        double m;
-        m = sqrt(v * v);
-        return m;
-    };
-
-    vector1 Normal(vector1 v1) { //JFLN: Returns the vector's unitary vector
-                                        //compare with the function unitario because this funtion is the same in MathFuntions
-        double m;
-        vector1 v2;
-        m = Module(v1);
-        if (m == 0)
-            v2 = 0;
-        else
-            v2 = v1 / m;
-        return v2;
-
-    };
-
-    double solidAngle(point b) {
-        double area = 0.0, d = 0.0, h = 0.0, r = 0.0, ang = 0.0, d2 = 0.2;
-        d = Module(p - b);
-        h = sqrt(d * d + ReceptionRadius * ReceptionRadius);
-        ang = acos(d / h);
-        h = d2 / cos(ang);
-        r = sqrt(h * h - d2 * d2);
-        area = PI * r * r;
-        return area;
-    };
-
-    void receptionRayTracing(point o, vector1 v, int t, double maxd, double ene) {
-        //o  Punto de partida del rayo
-        //v  Vector director del rayo
-        //p  Punto central del receptor (variable de la clase)
-        point pi;
-        double dis, dci; //Distancia de intersección
-        int tim;    //tiempo de vuelo entre el punto de partida y el receptor
-        int ind;
-        vector1 n, u;
-        u = Normal(v); //u es el unitario de v
-        n = u * (-1);    //vector normal al disco de recepción
-        dis = IntersectionDistance(n, p, u, o);
-        if (dis > 0 && dis < maxd) {
-            pi = o + (u * dis);
-            dci = Module(pi - p);
-            dis = Module(u * dis);
-            if (dci < ReceptionRadius) {
-                tim = int(1000 * dis / V_SON);
-                ind = t + tim;
-                if (ind >= 1000) ind = 999;
-                eR[ind] += ene;
-            }
-        }
-    };
-
-   /* void grabarArchivo() {
-        //Creación de archivo con respuesta del receptor
-        FILE* Archivo;
-        char buffer[50];
-        //sprintf(buffer, "Data/DatReceptor_%g_%g_%g.txt", p.x, p.y, p.z);
-        Archivo = fopen(buffer, "w");
-        for (int i = 0; i < 1000; i++) {
-            fprintf(Archivo, "%15g\n", eR[i]);
-        }
-        fclose(Archivo);
-        //Fin de creación de archivo
-    };*/
+struct reflection {
+    point r[MaxNPoints];
+    double d[MaxNPoints];
+    int idTriangle[MaxNPoints];
+    int Plane[MaxNPoints];
+    int Triangle[MaxNPoints];
+    int N;
+    bool lost;
+    int Ray;
 };
 
-//---------------------------------------------------------------------------
-struct reflection { //Respuesta al proceso de trazado de rayos.
-    point r[MaxNPoints];                    //Puntos de aplicaci�n
-    double d[MaxNPoints];                   //Distancia entre punto y punto
-    int idTriangle[MaxNPoints];             //Id �nico del tri�ngulo por cuarto donde se choc�
-    int Plane[MaxNPoints];                  //Nro. del plano por cuarto donde se choc�
-    int Triangle[MaxNPoints];               //Nro. del tri�ngulo por plano donde se choc�
-    int N;                                  //JFLN: Number of reflections
-    bool lost;                              //JFLN: If lost equal true, it's a reflection of a lost ray
-    int Ray;                                //JFLN: Number of RAY in preview
-};
-//---------------------------------------------------------------------------
 class room {
 public:
-    int			NP;		//Number of Planes
-    plane* p;		//Planes
-    double		maxd;	//Maxima distancia entre dos puntos en la sala.
-    //receptor* r;     //Number of receptors (microphones)
-    int         NR;     //Number of receptors
+    int	NP;
+    plane* p;
+    double maxd;
+    int NR;
 
     room() {
         NP = 0;
         p = NULL;
         NR = 0;
-        //r = NULL;
         maxd = 0.0;
     };
 
@@ -861,17 +453,6 @@ public:
         }
         NP = 0;
 
-        /*
-        if (NR > 0) {
-            for (int i = 0;i < NR;i++) {
-                r[i].Clear();
-            }
-            delete[] r;
-            r = NULL;
-        }
-        NR = 0;
-        */
-
         maxd = 0.0;
     };
 
@@ -883,21 +464,6 @@ public:
         maxd = 0.0;
     };
 
-    /*
-    double alfaDelta(int ID, char t) {
-        double ret = 0.0;
-        for (int i = 0;i < NP;i++) {
-            for (int j = 0;j < p[i].NT;j++) {
-                if (ID == p[i].t[j].ID) {
-                    if (t == 'a') ret = p[i].m.alfa;
-                    else ret = p[i].m.delta;
-                    break;
-                }
-            }
-        }
-        return ret;
-    };
-    */
 
     bool Inner(point p, triangle t) {
         double a1, a2, x, y, z, x0, y0, z0, x1, y1, z1, x2, y2, z2;
@@ -936,44 +502,14 @@ public:
 
     };
 
-    /*
-    double IntersectionDistance(vector1 v, vector1 n, point vp, point o) {
-        // n -> vector normal del plano
-        //v -> rayo
-        //vp -> punto del plano
-        // o origen del rayo
-        vector1 Vd;
-        Vd.x = vp.x - o.x;
-        Vd.y = vp.y - o.y;
-        Vd.z = vp.z - o.z;
-        double m;
-        m = v * n;
-        if (m == 0.0) {
-            return -1;
-        }
-        else {
-            return (n * Vd) / m;
-        }
-    };
-    */
-
-    double IntersectionDistance(vector1 n, point p, vector1 u, point o) {
-        /*JFLN:
-                vector n is the normal vector of the plane
-                point p is one of the vertex of the plane
-                vector u is the ray
-                point o is the initial position of the ray
-        */
+    double IntersectionDistance(vectorO n, point p, vectorO u, point o) {
         double d, m;
         m = n * u;
-        //JFLN: Has to have an error tolerance
         if (m == 0)
             return -1;
         d = (n * (p - o)) / m;
         return d;
     };
-
-
 
     void MaxDistance() {
         maxd = 0;
@@ -1009,49 +545,6 @@ public:
         NP += N;
     };
 
-    /*
-    void NewReceptor(int N) {
-        int R;
-        receptor* tr;
-        tr = new receptor[NR + N];
-        for (R = 0; R < NR; R++) {
-            tr[R] = r[R];
-        }
-        for (R = NR; R < NR + N; R++) {
-            tr[R].Clear();
-        }
-        if (NR > 0) {
-            delete[] r;
-            r = NULL;
-        }
-        r = tr;
-        NR += N;
-    };
-    */
-
-    /*
-    void DeletePlanes(int NSelectedPlanes, int SelectedPlane[MaxNSelectedPlanes]) {
-        bool Del;
-        int P,i,j=0;
-        if(NP>0&&NSelectedPlanes>0) {
-            plane *tp;
-            tp=new plane[NP-NSelectedPlanes];
-            for(P=0; P<NP; P++) {
-                Del=false;
-                for(i=0; i<NSelectedPlanes; i++)
-                    if(P==SelectedPlane[i])
-                        Del=true;
-                if(!Del) {
-                    tp[j]=p[P];
-                    j++;
-                }
-            }
-            delete[] p;
-            p=tp;
-            NP-=NSelectedPlanes;
-        }
-    };
-    */
 
     void Deleteplanes(int IP) { //IP indice del punto a borrar
         plane* tp;
@@ -1074,17 +567,15 @@ public:
 
     }
 
-    double Module(vector1 v) { //JFLN: Returns the vector's module
+    double Module(vectorO v) { //JFLN: Returns the vector's module
         double m;
         m = sqrt(v * v);
         return m;
     };
 
-    vector1 Normal(vector1 v1) { //JFLN: Returns the vector's unitary vector
-    //compare with the function unitario because this funtion is the same in MathFuntions
-
+    vectorO Normal(vectorO v1) {
         double m;
-        vector1 v2;
+        vectorO v2;
         m = Module(v1);
         if (m == 0)
             v2 = 0;
@@ -1094,7 +585,7 @@ public:
 
     };
 
-    reflection* RayTracing(point origen, vector1* Rays, int NRAYS) {
+    reflection* RayTracing(point origen, vectorO* Rays, int NRAYS) {
 
         reflection* ry;
         ry = NULL;
@@ -1117,7 +608,7 @@ public:
             p3;
 
         bool Stop;  //Bandera para detener el procedimiento
-        vector1 v;   //vector incidente
+        vectorO v;   //vector incidente
         point o;    //punto de partida (origen del vector incidente)
 
         ry = new reflection[NRAYS];
@@ -1210,12 +701,11 @@ public:
 
 };
 
-//---------------------------------------------------------------------------
 
 class source {
 public:
     point p;                //Posici�n
-    vector1* Rays;           //Direcciones de partida de los rayos
+    vectorO* Rays;           //Direcciones de partida de los rayos
     int NRAYS;              //N�mero de rayos
     double eF;              //Energ�a inicial de la fuente
     triangle IcoFace[20];   //Representaci�n gr�fica de la fuente
@@ -1288,7 +778,7 @@ public:
                         {1,2,0}, {2,3,0}, {3,4,0}, {4,5,0}, {5,1,0},
                         {6,7,0}, {7,8,0}, {8,9,0}, {9,10,0},{10,6,0}
         };
-        //matriz dos triangulos {1a aresta, 2a aresta, [0] V em p� [-1] V de cabe�a pra baixo}
+
         int T[20][3] = { {0,1,0},   {1,2,0},   {2,3,0},   {3,4,0},   {4,0,0},
                         {5,6,-1},  {6,7,0},   {7,8,-1},  {8,9,0},   {9,10,-1},
                         {10,11,0}, {11,12,-1},{12,13,0}, {13,14,-1},{14,5,0},
@@ -1296,13 +786,13 @@ public:
         };
         int i, j, k, n, m, RAY;
         double S, R, xB, yB, zB, xC, yC, zC, c[8];
-        //create Rays matrix
+
         if (NRAYS > 0)
             delete[] Rays;
         n = int(floor(sqrt((NumberOfRays - 2) / 10) + 0.5));
         NRAYS = int(2 + 10 * pow(n, 2));
-        Rays = new vector1[NRAYS];
-        //calculating the icosaedron vertives
+        Rays = new vectorO[NRAYS];
+
         S = 2 / sqrt(5);
         R = (5 - sqrt(5)) / 5;
         Rays[0].x = 0;
@@ -1320,7 +810,7 @@ public:
         Rays[11].y = 0;
         Rays[11].z = -1;
         RAY = 12;
-        //calculating the rays on the icosaedron edges
+
         for (j = 0; j < 30; j++) {
             A[j][2] = RAY;
             xB = Rays[A[j][0]].x;
@@ -1344,7 +834,7 @@ public:
                 RAY++;
             }
         }
-        //calculating the rays on the icosaedron faces
+
         for (k = 0; k < 20; k++)
             for (j = 1; j < n; j++) {
                 xB = Rays[A[T[k][0]][2] + j - 1].x;
@@ -1372,42 +862,5 @@ public:
             }
     };
 };
-//---------------------------------------------------------------------------
-
-
-
-
-
-
-
-inline double Module(vector1 v) { //JFLN: Returns the vector's module
-    double m;
-    m = sqrt(v * v);
-    return m;
-}
-//---------------------------------------------------------------------------
-inline vector1 VectorUnitario(vector1 v1) { //JFLN: Returns the vector's unitary vector
-    double m;
-    vector1 v2;
-    m = Module(v1);
-    if (m == 0)
-        v2 = 0;
-    else
-        v2 = v1 / m;
-    return v2;
-}
-
-inline vector1 TriangleNormal(triangle t) {
-    vector1 n;
-    n = VectorUnitario((t.p1 - t.p0) / (t.p2 - t.p0));
-    return n;
-};
-
-inline vector1 NormalPlano(plane p) {
-    vector1 n;
-    n = VectorUnitario((p.p[1] - p.p[0]) / (p.p[2] - p.p[0]));
-    return n;
-}
-
 
 #endif

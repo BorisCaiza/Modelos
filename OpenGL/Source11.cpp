@@ -19,7 +19,7 @@
 bool cuartoCargado;
 room r;
 source s;
-int indiceRayo = 0;
+int indiceRayo = 3;
 unsigned int variable = GL_LINE;
 unsigned int variable2 = GL_LINE;
 
@@ -112,7 +112,7 @@ int main()
     Shader cubo("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
     Shader icosaedro("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
     Shader rayo("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
-    Shader rayo2("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
+    //Shader rayo2("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
 
     laodRoom();
 
@@ -158,8 +158,9 @@ int main()
 
     }
 
-    while (contadorIco < 180 && indiceIco < 20) {
+    
 
+    while (contadorIco < 180 && indiceIco < 20) {
         vertices2[contadorIco] = s.IcoFace[indiceIco].p0.x;
         contadorIco++;
         vertices2[contadorIco] = s.IcoFace[indiceIco].p0.y;
@@ -176,11 +177,11 @@ int main()
         contadorIco++;
 
 
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.x ;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.x;
         contadorIco++;
         vertices2[contadorIco] = s.IcoFace[indiceIco].p2.y;
         contadorIco++;
-        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.z ;
+        vertices2[contadorIco] = s.IcoFace[indiceIco].p2.z;
         contadorIco++;
 
 
@@ -192,54 +193,27 @@ int main()
 
     s.createRays(20);
 
-
-
-
-    reflection* arrayreflecciones = r.RayTracing(s.p, s.Rays, s.NRAYS);
+    reflection* reflexiones = r.RayTracing(s.p, s.Rays, s.NRAYS);
 
 
 
     point destino;
     point origen;
 
-  //  origen = NULL;
-   // destino = NULL;
-
-    /*
-    origen[0].x = 0;
-    origen[0].y = 0;
-    origen[0].z = 0;
-
-    origen[1].x = 0;
-    origen[1].y = 0;
-    origen[1].z = 0;
 
 
-    destino[0].x = 0;
-    destino[0].y = 0;
-    destino[0].z = 0;
-
-    destino[1].x = 0;
-    destino[1].y = 0;
-    destino[1].z = 0;
-
-    */
+    origen.x = reflexiones[indiceRayo].r[0].x;
+    origen.y = reflexiones[indiceRayo].r[0].y;
+    origen.z = reflexiones[indiceRayo].r[0].z;
 
 
-  
-    
-        origen.x = arrayreflecciones[indiceRayo].r[0].x;
-        origen.y = arrayreflecciones[indiceRayo].r[0].y;
-        origen.z = arrayreflecciones[indiceRayo].r[0].z;
+    destino.x = reflexiones[indiceRayo].r[1].x;
+    destino.y = reflexiones[indiceRayo].r[1].y;
+    destino.z = reflexiones[indiceRayo].r[1].z;
 
 
-        destino.x = arrayreflecciones[indiceRayo].r[1].x;
-        destino.y = arrayreflecciones[indiceRayo].r[1].y;
-        destino.z = arrayreflecciones[indiceRayo].r[1].z;
-    
 
-   
-    
+
     /*
     printf("El rayo es el %f \n", destino.x);
     printf("El rayo es el %f \n", destino.y);
@@ -288,7 +262,7 @@ int main()
 
     double tiempoAux = 0;
     int contadorPunto = 1;
-
+    int contador = 0;
 
     // render loop
     // -----------
@@ -296,9 +270,9 @@ int main()
     {
         // per-frame time logic
        // --------------------
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        float tiempoActual = glfwGetTime();
+        deltaTime = tiempoActual - lastFrame;
+        lastFrame = tiempoActual;
 
         // input
         // -----
@@ -306,7 +280,7 @@ int main()
 
         // render
 // ------
-        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // be sure to activate shader when setting uniforms/drawing objects
@@ -353,25 +327,31 @@ int main()
         double distancia = origen.distancia(destino);
         double tiempoVuelo = glfwGetTime() - tiempoAux;
         double distanciaAux = tiempoVuelo * SPEED;
-        
+
 
         if ((distanciaAux) >= distancia) {
             origen = destino;
             contadorPunto++;
-            destino.x = arrayreflecciones[indiceRayo].r[contadorPunto].x;
-            destino.y = arrayreflecciones[indiceRayo].r[contadorPunto].y;
-            destino.z = arrayreflecciones[indiceRayo].r[contadorPunto].z;
-            tiempoAux = glfwGetTime();  
+            destino.x = reflexiones[indiceRayo].r[contadorPunto].x;
+            destino.y = reflexiones[indiceRayo].r[contadorPunto].y;
+            destino.z = reflexiones[indiceRayo].r[contadorPunto].z;
+            tiempoAux = glfwGetTime();
+            contador++;
+            //printf("Este es el valor del contador %d\n", contador);
         };
+        double moduloVelocidad = SPEED / distancia;
+        double distanciaX = (destino.x - origen.x);
+        double distanciaY = (destino.y - origen.y);
+        double distanciaZ = (destino.z - origen.z);
 
+        double traslacionX = distanciaX * tiempoVuelo * moduloVelocidad;
+        double traslacionY = distanciaY * tiempoVuelo * moduloVelocidad;
+        double traslacionZ = distanciaZ * tiempoVuelo * moduloVelocidad;
 
-
-
-        
-        model = glm::translate(model, glm::vec3(origen.x + ((destino.x - origen.x)) * (glfwGetTime() - tiempoAux) * (SPEED/ distancia), origen.y + ((destino.y - origen.y)) * (glfwGetTime() - tiempoAux) * (SPEED/ distancia), origen.z + ((destino.z - origen.z) * (glfwGetTime() - tiempoAux)) * (SPEED/ distancia)));
-        model = glm::scale(model, glm::vec3(0.03f));
+        model = glm::translate(model, glm::vec3(origen.x + traslacionX, origen.y + traslacionY, origen.z + traslacionZ));
+        model = glm::scale(model, glm::vec3(0.03f, 0.1f, 0.03f));
         rayo.use();
-        rayo.setMat4("model",model);
+        rayo.setMat4("model", model);
         rayo.setMat4("projection", projection);
         rayo.setVec3("objectColor", 0.0f, 1.0f, 0.0f);
         rayo.setMat4("view", view);
@@ -401,8 +381,7 @@ int main()
 
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+
 void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -480,7 +459,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 void laodRoom() {
     if (!cuartoCargado) {
-       
+
         r.NewPlanes(6);
 
         r.p[0].NewPoints(4);
@@ -611,7 +590,7 @@ void laodRoom() {
 
         int cont_t = 0;
         for (int i = 0; i < r.NP; i++) {
-            r.p[i].n = TriangleNormal(r.p[i].t[0]);
+            r.p[i].n = r.p[i].t[0].TriangleNormal();
             for (int j = 0; j < r.p[i].NT; j++) {
                 r.p[i].t[j].CalculateProjection();
                 r.p[i].t[j].Centroid();
@@ -625,5 +604,3 @@ void laodRoom() {
 
     }
 }
-
-

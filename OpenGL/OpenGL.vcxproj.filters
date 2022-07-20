@@ -23,9 +23,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\2022-A\Modelos\Deberes Gabriel Vivas\Nueva carpeta (2)\Ambiente3D3\Ambiente3D_estable\Ambiente3D\Definitions.h">
-      <Filter>Archivos de origen</Filter>
-    </ClInclude>
     <ClInclude Include="Header.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
