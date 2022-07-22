@@ -19,7 +19,7 @@
 bool cuartoCargado;
 room r;
 source s;
-int indiceRayo = 3;
+int indiceRayo = 1;
 unsigned int variable = GL_LINE;
 unsigned int variable2 = GL_LINE;
 
@@ -286,10 +286,10 @@ int main()
         // be sure to activate shader when setting uniforms/drawing objects
         cubo.use();
         cubo.setVec3("objectColor", 1.0f, 1.0f, 1.0f);
-        cubo.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+       // cubo.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
         //Exercise 13 Task 2
-        cubo.setVec3("lightPos", lightPos);
+       // cubo.setVec3("lightPos", lightPos);
 
         //Exercise 13 Task 3
         cubo.setVec3("viewPos", camera.Position);
@@ -407,14 +407,7 @@ void processInput(GLFWwindow* window)
         variable2 = GL_FILL;
     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
         variable2 = GL_LINE;
-    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-        indiceRayo = 1;
-    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-        indiceRayo = 2;
-    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-        indiceRayo = 3;
-    if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
-        indiceRayo = 0;
+   
     //If I want to stay in ground level (xz plane)
     //camera.Position.y = 0.0f;
 
