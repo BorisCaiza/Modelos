@@ -15,13 +15,7 @@
 //==================================
 #include "Header.h"
 
-//VariablesGlobales
-bool cuartoCargado;
-room r;
-source s;
-int indiceRayo = 1;
-unsigned int variable = GL_LINE;
-unsigned int variable2 = GL_LINE;
+
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -29,6 +23,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 void laodRoom();
+void calcular();
 
 
 // settings
@@ -40,6 +35,37 @@ Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+
+//VariablesGlobales
+
+int contradorVertices = 0;
+float vertices2[180];
+int contadorIco = 0;
+int contadorCentroides = 0;
+int indiceIco = 0;
+bool cuartoCargado;
+receptor re;
+room r;
+source s;
+reflection* ry; //reflexion del trazado de rayos
+matEnergia mE; //matriz de energia difusa
+int numTri = 0;
+
+
+matDouble matAngulos;
+matDouble matDis;
+matInt matTime;
+
+int indiceRayo = 1;
+unsigned int variable = GL_LINE;
+unsigned int variable2 = GL_LINE;
+
+vectorO** vis_vector; //vectores para visualización
+double** vis_modvec; //distancia acumulativa para animación de la propagación
+int** vis_timacu; //Teimpo de vuelo de los vectores
+int tiempoBaricentros[12][12];
+
+
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -100,35 +126,21 @@ int main()
     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-    //Exercise 13 Task 1
-    // build and compile our shader zprogram
-    // ------------------------------------
-    //Shader lightingShader("D:/Users/mlcon/2022-A/Modelos y Simulacion/proyectos/shaders/shader_exercise13t3_colors.vs", "D:/Users/mlcon/2022-A/Modelos y Simulacion/proyectos/shaders/shader_exercise13t3_colors.fs");
-    //Shader lightCubeShader("D:/Users/mlcon/2022-A/Modelos y Simulacion/proyectos/shaders/shader_exercise13_lightcube.vs", "D:/Users/mlcon/2022-A/Modelos y Simulacion/proyectos/shaders/shader_exercise13_lightcube.fs");
-   // Shader lightingShader("shader_1.vs", "shader_1.fs");
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
 
-    Shader cubo("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
-    Shader icosaedro("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
-    Shader rayo("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
-    //Shader rayo2("C:/shaders/shader_exercise13t2_colors.vs", "C:/shaders/shader_exercise13t2_colors.fs");
+
+    Shader cubo("C:/shaders/shader_exercise13.vs", "C:/shaders/shader_exercise13.fs");
+    Shader icosaedro("C:/shaders/shader_exercise13.vs", "C:/shaders/shader_exercise13.fs");
+    Shader rayo("C:/shaders/shader_exercise13.vs", "C:/shaders/shader_exercise13.fs");
 
     laodRoom();
-
-    float vertices1[108];
-    int contradorVertices = 0;
-    float vertices2[180];
-    int contadorIco = 0;
-    int indiceIco = 0;
+   
+    
+    float vertices1[500];
+    
   
-
-
-
-
-    while (contradorVertices < 108) {
         for (int i = 0; i < r.NP; i++) {
             for (int j = 0; j < r.p[i].NT; j++) {
+
                 vertices1[contradorVertices] = r.p[i].t[j].p0.x;
                 contradorVertices++;
                 vertices1[contradorVertices] = r.p[i].t[j].p0.y;
@@ -151,16 +163,17 @@ int main()
                 contradorVertices++;
                 vertices1[contradorVertices] = r.p[i].t[j].p2.z;
                 contradorVertices++;
-
+                
             }
         }
 
 
-    }
-
     
 
+
+
     while (contadorIco < 180 && indiceIco < 20) {
+
         vertices2[contadorIco] = s.IcoFace[indiceIco].p0.x;
         contadorIco++;
         vertices2[contadorIco] = s.IcoFace[indiceIco].p0.y;
@@ -168,15 +181,13 @@ int main()
         vertices2[contadorIco] = s.IcoFace[indiceIco].p0.z;
         contadorIco++;
 
-
         vertices2[contadorIco] = s.IcoFace[indiceIco].p1.x;
         contadorIco++;
         vertices2[contadorIco] = s.IcoFace[indiceIco].p1.y;
         contadorIco++;
         vertices2[contadorIco] = s.IcoFace[indiceIco].p1.z;
         contadorIco++;
-
-
+       
         vertices2[contadorIco] = s.IcoFace[indiceIco].p2.x;
         contadorIco++;
         vertices2[contadorIco] = s.IcoFace[indiceIco].p2.y;
@@ -286,12 +297,12 @@ int main()
         // be sure to activate shader when setting uniforms/drawing objects
         cubo.use();
         cubo.setVec3("objectColor", 1.0f, 1.0f, 1.0f);
-       // cubo.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        // cubo.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
-        //Exercise 13 Task 2
-       // cubo.setVec3("lightPos", lightPos);
+         //Exercise 13 Task 2
+        // cubo.setVec3("lightPos", lightPos);
 
-        //Exercise 13 Task 3
+         //Exercise 13 Task 3
         cubo.setVec3("viewPos", camera.Position);
 
         // view/projection transformations
@@ -309,13 +320,13 @@ int main()
         // render the cube
         glPolygonMode(GL_FRONT_AND_BACK, variable);
         glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRIANGLES, 0, 142);
 
 
 
         icosaedro.use();
         icosaedro.setMat4("projection", projection);
-        cubo.setVec3("objectColor", 1.0f, 0.0f, 0.0f);
+        icosaedro.setVec3("objectColor", 1.0f, 0.0f, 0.0f);
         icosaedro.setMat4("view", view);
         glm::mat4 model2 = glm::mat4(1.0f);
         icosaedro.setMat4("model", model2);
@@ -336,17 +347,16 @@ int main()
             destino.y = reflexiones[indiceRayo].r[contadorPunto].y;
             destino.z = reflexiones[indiceRayo].r[contadorPunto].z;
             tiempoAux = glfwGetTime();
-            contador++;
-            //printf("Este es el valor del contador %d\n", contador);
+
         };
-        double moduloVelocidad = SPEED / distancia;
+        double factorVelocidad = SPEED / distancia;
         double distanciaX = (destino.x - origen.x);
         double distanciaY = (destino.y - origen.y);
         double distanciaZ = (destino.z - origen.z);
 
-        double traslacionX = distanciaX * tiempoVuelo * moduloVelocidad;
-        double traslacionY = distanciaY * tiempoVuelo * moduloVelocidad;
-        double traslacionZ = distanciaZ * tiempoVuelo * moduloVelocidad;
+        double traslacionX = distanciaX * (tiempoVuelo * factorVelocidad);
+        double traslacionY = distanciaY * tiempoVuelo * factorVelocidad;
+        double traslacionZ = distanciaZ * tiempoVuelo * factorVelocidad;
 
         model = glm::translate(model, glm::vec3(origen.x + traslacionX, origen.y + traslacionY, origen.z + traslacionZ));
         model = glm::scale(model, glm::vec3(0.03f, 0.1f, 0.03f));
@@ -357,7 +367,7 @@ int main()
         rayo.setMat4("view", view);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 60);
+        glDrawArrays(GL_TRIANGLES, 0, 80);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -407,7 +417,7 @@ void processInput(GLFWwindow* window)
         variable2 = GL_FILL;
     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
         variable2 = GL_LINE;
-   
+
     //If I want to stay in ground level (xz plane)
     //camera.Position.y = 0.0f;
 
@@ -452,7 +462,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 void laodRoom() {
     if (!cuartoCargado) {
-
+        int nDivTri = 1;
         r.NewPlanes(6);
 
         r.p[0].NewPoints(4);
@@ -473,8 +483,8 @@ void laodRoom() {
         r.p[0].p[3].y = 2.0f;
         r.p[0].p[3].z = -2.0f;
 
-        r.p[0].PointGenTriangle();
-
+        //r.p[0].PointGenTriangle();
+        r.p[0].MoreTriangle(nDivTri);
 
 
         //Cara del frente
@@ -496,7 +506,8 @@ void laodRoom() {
         r.p[1].p[3].y = -2.0f;
         r.p[1].p[3].z = 2.0f;
 
-        r.p[1].PointGenTriangle();
+        //r.p[1].PointGenTriangle();
+        r.p[1].MoreTriangle(nDivTri);
 
         //cara izquierda
         r.p[2].NewPoints(4);
@@ -516,8 +527,8 @@ void laodRoom() {
         r.p[2].p[3].x = -2.0f;
         r.p[2].p[3].y = -2.0f;
         r.p[2].p[3].z = -2.0f;
-        r.p[2].PointGenTriangle();
-
+        //r.p[2].PointGenTriangle();
+        r.p[2].MoreTriangle(nDivTri);
         //cara derecha
         r.p[3].NewPoints(4);
 
@@ -536,7 +547,8 @@ void laodRoom() {
         r.p[3].p[3].x = 2.0f;
         r.p[3].p[3].y = 2.0f;
         r.p[3].p[3].z = -2.0f;
-        r.p[3].PointGenTriangle();
+        //r.p[3].PointGenTriangle();
+        r.p[3].MoreTriangle(nDivTri);
 
 
         //cara superior
@@ -557,7 +569,8 @@ void laodRoom() {
         r.p[4].p[3].x = 2.0f;
         r.p[4].p[3].y = -2.0f;
         r.p[4].p[3].z = 2.0f;
-        r.p[4].PointGenTriangle();
+        //r.p[4].PointGenTriangle();
+        r.p[4].MoreTriangle(nDivTri);
 
         //cara inferior
         r.p[5].NewPoints(4);
@@ -577,23 +590,171 @@ void laodRoom() {
         r.p[5].p[3].x = 2.0f;
         r.p[5].p[3].y = 2.0f;
         r.p[5].p[3].z = -2.0f;
-        r.p[5].PointGenTriangle();
+        //r.p[5].PointGenTriangle();
+        r.p[5].MoreTriangle(nDivTri);
 
         cuartoCargado = true;
 
+        //Inicializar normales de los planos
+      // se calculan las normales con la normal de su primer triangulo
+      // se calcula el baricentro de los triángulos
         int cont_t = 0;
         for (int i = 0; i < r.NP; i++) {
-            r.p[i].n = r.p[i].t[0].TriangleNormal();
+            r.p[i].n = (r.p[i].t[0].TriangleNormal());
             for (int j = 0; j < r.p[i].NT; j++) {
                 r.p[i].t[j].CalculateProjection();
-                r.p[i].t[j].Centroid();
+                r.p[i].t[j].Centroide();
                 r.p[i].t[j].ID = cont_t;
                 cont_t++;
             }
         }
+
+        numTri = cont_t;
+
+
+             
+
+
+        
+        matAngulos.init(numTri, numTri);
+        matDis.init(numTri, numTri);
+        matTime.init(numTri, numTri);
+
+      
+
+      
+        
+
+        for (int plano1 = 0; plano1 < r.NP; plano1++) {
+
+            for (int triangulo1 = 0; triangulo1 < r.p[plano1].NT; triangulo1++) {
+                
+                point baricentro1 = r.p[plano1].t[triangulo1].bc;
+                int id_tr_1 = r.p[plano1].t[triangulo1].ID;
+
+                for (int plano2 = 0; plano2 < r.NP; plano2++) {
+
+                    for (int triangulo2 = 0; triangulo2 < r.p[plano2].NT; triangulo2++) {
+
+                        point baricentro2 = r.p[plano2].t[triangulo2].bc;
+                        int id_tr_2 = r.p[plano2].t[triangulo2].ID;
+                        
+                        if (plano1 != plano2) {
+                            matDis.d[id_tr_1][id_tr_2] = baricentro1.distancia(baricentro2);
+                        }
+                    }
+                }
+
+            }
+        }
+
+        /*
+        for (int i = 0; i < r.NP; i++) {
+
+            for (int j = 0; j < r.p[i].NT; j++) {
+                // r.p[i].t[j].bc; //Primer Baricentro
+                for (int k = 0; k < r.NP; k++) {
+
+                    for (int l = 0; l < r.p[k].NT; l++) {
+                        // r.p[k].t[l].bc; //Segundo Baricentro
+                        if (i != k) {
+                            matDis.d[r.p[i].t[j].ID][r.p[k].t[l].ID] = r.p[i].t[j].bc.distancia(r.p[k].t[l].bc);
+                        }
+                    }
+                }
+
+            }
+        }*/
+
+
+        
+
+        for (int i = 0; i < matDis.I; i++) {
+
+            for (int j = 0; j < matDis.J; j++) {
+
+                matTime.d[i][j] = int(1000 * matDis.d[i][j] / V_SON);
+
+            }
+        }
+
+        matTime.grabarArchivo('t', numTri);
+        matDis.grabarArchivo('d',numTri);
+
+     
 
 
 
 
     }
 }
+
+
+void  calcular() {
+    double eneRay, eneRes; //Energía del rayo y energía residual
+    //durSim = 1000; //Duración de la simulación (1 seg o 1000 miliseg)
+    re.createTimeSamples(durSim);
+    s.eF = 100;
+    s.createRays(numRay);
+    //edRayos->Text = s.NRAYS;
+
+    eneRay = s.eF / s.NRAYS;
+
+    ry = NULL;
+    ry = r.RayTracing(s.p, s.Rays, s.NRAYS);
+
+    mE.init(numTri, durSim);
+    //mEN.init(numTri, durSim);
+
+    vis_vector = new vectorO * [s.NRAYS];
+    vis_modvec = new double* [s.NRAYS];
+    vis_timacu = new int* [s.NRAYS];
+
+    for (int R = 0; R < s.NRAYS; R++) {
+
+        eneRes = eneRay; //Inicializo energía residual
+
+        vis_vector[R] = new vectorO[ry[R].N - 1];
+        vis_modvec[R] = new double[ry[R].N];
+        vis_timacu[R] = new int[ry[R].N];
+
+        /*/////////////////////////////////////////*/
+
+        vis_modvec[R][0] = 0.0;
+        vis_timacu[R][0] = 0.0;
+        printf("\n");
+
+        for (int i = 0; i < ry[R].N - 1; i++) {
+            //Guardo el vector con la ruta de la reflexion
+            vis_vector[R][i] = ry[R].r[i + 1] - ry[R].r[i];
+            //Registro la distancia acumulada de las reflexiones anteriores
+            vis_modvec[R][i + 1] = vis_modvec[R][i] + ry[R].d[i + 1];
+            vis_timacu[R][i + 1] = int((1000 * vis_modvec[R][i + 1] / V_SON));
+
+        }
+
+        //Captacion en recpetor de reflexiones especulare sy carga de 
+        for (int i = 1; i < ry[R].N; i++) {
+
+            int indTri, indTime;            //indices para la matriz de transicion de energia
+            indTri = ry[R].idTriangle[i];
+            indTime = vis_timacu[R][i];     //instancias de tiempo donde se produjo el choque
+
+
+            double alfa, delta;
+            alfa = 0.2;
+            delta = 0.15;
+            //alfa = r.p[ry[R].Plane[i]].m.alfa;
+            //delta = r.p[ry[R].Plane[i]].m.delta;
+
+            mE.energia[indTri][indTime] += (eneRes * (1 - alfa) * delta); //aquí guardo la enerfia difusa cargo la matriz
+
+            //reception ray tracing,  caoptacion del receptor
+            //punto de partida del rao, un tiempo t, la maxima distanciay el doyble que es la energia que va 
+            re.receptionRayTracing(ry[R].r[i - 1], vis_vector[R][i - 1], vis_timacu[R][i], r.maxd, eneRes);
+            //estamos actuyalizando la energia residual del rayo la energia que le queda.
+            eneRes = eneRes * (1 - alfa) * (1 - delta);//energia reflejada especularmente
+        }
+    }
+}
+

@@ -1,10 +1,13 @@
 ﻿#pragma once
+#pragma warning(disable:4996)
 //---------------------------------------------------------------------------
 #ifndef HeaderH
 #define HeaderH
-//---------------------------------------------------------------------------
-#include <stdio.h>
+//---------------------------------------------------------------------------#
+#include <iostream>
 #include <math.h>
+#include <stdio.h>
+
 
 #define xy 0
 #define xz 1
@@ -12,6 +15,9 @@
 #define SPEED 5
 #define PI 3.14
 #define MaxNPoints 200
+#define V_SON 340.0
+#define durSim 1000
+#define numRay 100
 
 using namespace std;
 
@@ -115,6 +121,8 @@ public:
     }
 };
 
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 class point {
 public:
@@ -200,8 +208,14 @@ public:
         return sqrt((p2.x - x) * (p2.x - x) + (p2.y - y) * (p2.y - y) + (p2.z - z) * (p2.z - z));
     };
 
+    void print() { //Imprimir el punto
+        cout << "(x: " << x << " y: " << y << " z: " << z << ")" << endl;
+    };
+
 };
 
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 class triangle {
 public:
@@ -240,7 +254,7 @@ public:
         ID = 0;
     };
 
-    void Centroid() {
+    void Centroide() {
         bc = (p0 + p1 + p2) / 3;
     };
 
@@ -287,8 +301,62 @@ public:
             a0 = 1 / (-x1 * y0 + x2 * y0 + x0 * y1 - x2 * y1 - x0 * y2 + x1 * y2 + 0.000001);
         }
     };
+
+    double solidAngle(point b) {
+        double area = 0.0, d = 0.2;
+        triangle t;
+        vectorO v0, v1, v2;
+        v0 = p0 - b;
+        v1 = p1 - b;
+        v2 = p2 - b;
+        v0 = v0 / v0.Module();
+        v1 = v1 / v1.Module();
+        v2 = v2 / v2.Module();
+        t.p0 = b + (v0 * d);
+        t.p1 = b + (v1 * d);
+        t.p2 = b + (v2 * d);
+        area = t.TriangleArea();
+        return area;
+    };
+
+
+
 };
 
+//---------------------------------------------------------------------------
+
+class matPuntos {
+public:
+    point** p;      //Matriz dinámica de puntos
+    int I, J;         //Número de puntos
+
+    matPuntos() {
+        I = 0;
+        J = 0;
+        p = NULL;
+    };
+
+    ~matPuntos() { //destructor
+        I = 0;
+        J = 0;
+        delete[] p;
+        p = NULL;
+    };
+
+    void init(int x, int y) {
+        I = x;
+        J = y;
+        p = new point * [I];
+        for (int i = 0; i < I; i++) {
+            p[i] = new point[J];
+            for (int j = 0; j < J; j++)
+                p[i][j] = 0.0;
+        }
+    };
+};
+
+
+//---------------------------------------------------------------------------
 
 class plane {
 public:
@@ -403,6 +471,58 @@ public:
         }
     };
 
+    void MoreTriangle(int nd) { //Genera más triángulos a partir de una malla con nd divisiones
+        if (NP == 4) { //Numero de puntos
+            int i, j, cont;   //Contadores
+            matPuntos mp;   //Matriz dinámica de puntos
+            vectorO v1, v2;  //vectores directores en cada lado del cuadrado
+            double m1, m2;  //módulos de los vectores directores
+            double p1, p2;  //tamaño del paso
+            v1 = p[1] - p[0];   //vector director 1 generado por el vértice 1 y 2
+            v2 = p[2] - p[1];   //vector director 2 generado por el vértice 2 y 3
+            m1 = v1.Module(); //módulo del vector director 1
+            m2 = v2.Module(); //módulo del vector director 2
+            v1 = v1 / m1;       //vector director 1 unitario
+            v2 = v2 / m2;       //vector director 2 unitario
+            p1 = m1 / nd;       //paso 1
+            p2 = m2 / nd;       //paso 2
+
+            mp.init(nd + 1, nd + 1);//Lleno la matriz de puntos, según los vértices del cuadrado inicial.
+            for (i = 0; i <= nd; i++) {
+                mp.p[i][0] = p[0] + (v1 * (p1 * i));
+                for (j = 1; j <= nd; j++)
+                    mp.p[i][j] = mp.p[i][0] + (v2 * (p2 * j));
+            }
+
+            plane* a_p = new plane[nd * nd];
+            cont = 0;
+            for (i = 0; i < nd; i++) {
+                for (j = 0; j < nd; j++) {
+                    a_p[cont].Clear();
+                    a_p[cont].NewPoints(4);
+                    a_p[cont].p[0] = mp.p[i][j];
+                    a_p[cont].p[1] = mp.p[i + 1][j];
+                    a_p[cont].p[2] = mp.p[i + 1][j + 1];
+                    a_p[cont].p[3] = mp.p[i][j + 1];
+                    a_p[cont].PointGenTriangle();
+                    cont++;
+                }
+            }
+
+            cont = 0;
+            NewTriangle(2 * nd * nd);
+            for (int i = 0; i < nd * nd; i++) {
+                for (int j = 0; j < a_p[i].NT; j++) {
+                    t[cont] = a_p[i].t[j];
+                    cont++;
+                }
+            }
+            delete a_p;
+            a_p = NULL;
+        }
+    };
+
+
     void Clear() {
         Color.R = 0.5;
         Color.G = 0.5;
@@ -418,16 +538,22 @@ public:
 
 };
 
-struct reflection {
-    point r[MaxNPoints];
-    double d[MaxNPoints];
-    int idTriangle[MaxNPoints];
-    int Plane[MaxNPoints];
-    int Triangle[MaxNPoints];
-    int N;
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
+struct reflection { //Respuesta al proceso de rayos
+    point r[MaxNPoints]; //puntos de aplicación
+    double d[MaxNPoints]; //distancia entre punto y punto
+    int idTriangle[MaxNPoints]; //  id único por cada triangulo donde se produjo el choque
+    int Plane[MaxNPoints];//Nro. del plano por cuarto donde se choco
+    int Triangle[MaxNPoints]; //Nr. del trangulo por plano donde se choco
+    int N; //numero de refleciones
     bool lost;
     int Ray;
 };
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 class room {
 public:
@@ -701,6 +827,8 @@ public:
 
 };
 
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 class source {
 public:
@@ -861,6 +989,367 @@ public:
                 }
             }
     };
+};
+
+
+
+/*---------------------------------------------------------------------*/
+
+struct material {   //En una simulación completa alfa y delta serían arreglos de n elementos para las n bandas consideradas
+        float alfa;
+        float delta;
+        //Aqui también sería útil tener un string con el nombre del materia, e.g. "Madera","Ladrillo"
+    };
+
+/*---------------------------------------------------------------------*/
+
+
+class receptor {
+    public:
+        point p;                //Posición
+        double ReceptionRadius; //Radio de recepción
+        double* eR;             //Energía recibida en el receptor
+        int NIt;                //Instantes de tiempo considerados
+        double VisualRadius;    //Radio visual (tamaño en pantalla)
+        color Color;            //Color del receptor
+        point SphereFace[32][4];//Representación gráfica del receptor
+
+        receptor() {
+            p = 0.0;
+            eR = NULL;
+            NIt = 0;
+
+            Color.R = 0.5;
+            Color.G = 1.0;
+            Color.B = 0.5;
+
+            VisualRadius = 0.3;
+            ReceptionRadius = 0.3;
+
+            //Creating Sphere
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 8; j++) {
+                    SphereFace[8 * i + j][0].x = sin(i * PI / 4) * cos((j + 1) * PI / 4);
+                    SphereFace[8 * i + j][0].y = sin(i * PI / 4) * sin((j + 1) * PI / 4);
+                    SphereFace[8 * i + j][0].z = cos(i * PI / 4);
+                    SphereFace[8 * i + j][1].x = sin(i * PI / 4) * cos(j * PI / 4);
+                    SphereFace[8 * i + j][1].y = sin(i * PI / 4) * sin(j * PI / 4);
+                    SphereFace[8 * i + j][1].z = cos(i * PI / 4);
+                    SphereFace[8 * i + j][2].x = sin((i + 1) * PI / 4) * cos(j * PI / 4);
+                    SphereFace[8 * i + j][2].y = sin((i + 1) * PI / 4) * sin(j * PI / 4);
+                    SphereFace[8 * i + j][2].z = cos((i + 1) * PI / 4);
+                    SphereFace[8 * i + j][3].x = sin((i + 1) * PI / 4) * cos((j + 1) * PI / 4);
+                    SphereFace[8 * i + j][3].y = sin((i + 1) * PI / 4) * sin((j + 1) * PI / 4);
+                    SphereFace[8 * i + j][3].z = cos((i + 1) * PI / 4);
+                }
+            }
+        };
+
+        ~receptor() {/*
+            deleteTimeSamples();
+        */
+        };
+
+        void Clear() {
+            deleteTimeSamples();
+        };
+
+        void createTimeSamples(int dSim) {
+            deleteTimeSamples();
+            NIt = dSim;
+            eR = new double[NIt];
+            for (int i = 0; i < NIt; i++) {
+                eR[i] = 0.0; //vwctor de energia, tiene que tener un vector.  capta energia en diferentes instantes de tiempo y tiene que ser
+                // un vectoir asignado de forna dinamica
+            }
+        };
+
+        void deleteTimeSamples() {
+            if (NIt > 0) {
+                delete eR;
+                eR = NULL;
+                NIt = 0;
+            }
+        };
+
+        double IntersectionDistance(vectorO n, point p, vectorO u, point o) { //receptor requiere de esta funcion
+            /*JFLN:
+                vector n is the normal vector of the plane
+                point p is one of the vertex of the plane
+                vector u is the ray
+                point o is the initial position of the ray
+            */
+            double d, m;
+            m = n * u;
+            //JFLN: Has to have an error tolerance
+            if (m == 0)
+                return -1;
+            d = (n * (p - o)) / m;
+            return d;
+        };
+
+        double Module(vectorO v) { //JFLN: Returns the vector's module
+            double m;
+            m = sqrt(v * v);
+            return m;
+        };
+
+        vectorO Normal(vectorO v1) { //JFLN: Returns the vector's unitary vector
+                                            //compare with the function unitario because this funtion is the same in MathFuntions
+            double m;
+            vectorO v2;
+            m = Module(v1);
+            if (m == 0) {
+                v2.x = 0;
+                v2.y = 0;
+                v2.z = 0;
+            }
+
+            else {
+                v2 = v1 / m;
+            }
+
+            return v2;
+
+        };
+
+        double solidAngle(point b) {
+            double area = 0.0, d = 0.0, h = 0.0, r = 0.0, ang = 0.0, d2 = 0.2; //Aquí a 0.2 con respecto al receptor
+            d = Module(p - b);
+            h = sqrt(d * d + ReceptionRadius * ReceptionRadius);
+            ang = acos(d / h);
+            h = d2 / cos(ang);
+            r = sqrt(h * h - d2 * d2);
+            area = PI * r * r;
+            return area;
+        };
+
+        void receptionRayTracing(point o, vectorO v, int t, double maxd, double ene) {
+            //o  Punto de partida del rayo
+            //v  Vector director del rayo
+            //p  Punto central del receptor (variable de la clase)
+            //t tiempo de vuelo
+            point pi;
+            double dis, dci; //Distancia de intersección
+            int tim;    //tiempo de vuelo entre el punto de partida y el receptor
+            int ind;
+            vectorO n, u;
+            u = Normal(v); //u es el unitario de v
+            n = u * (-1);    //vector normal al disco de recepción
+            dis = IntersectionDistance(n, p, u, o);
+            if (dis > 0 && dis < maxd) {
+                pi = o + (u * dis);
+                dci = Module(pi - p);
+                dis = Module(u * dis);
+                if (dci < ReceptionRadius) {
+                    tim = int(1000 * dis / V_SON);
+                    ind = t + tim;
+                    if (ind >= 1000) ind = 999;
+                    eR[ind] += ene;
+                }
+            }
+        };
+
+        /*void grabarArchivo() {
+            //Creación de archivo con respuesta del receptor
+            FILE* Archivo;
+            char buffer[50];
+            sprintf(buffer, "Data/DatReceptor_%g_%g_%g.txt", p.x, p.y, p.z);
+            Archivo = fopen(buffer, "w");
+            for (int i = 0; i < 1000; i++) {
+                fprintf(Archivo, "%15g\n", eR[i]);
+            }
+            fclose(Archivo);
+            //Fin de creación de archivo
+        };*/
+    };
+
+//---------------------------------------------------------------------------//
+
+
+class matEnergia { //Alñamcena espacio-temporal de energia difusa, en que tiempo y en que triangulo.
+    public:
+        double** energia;
+        int ele; //Número de triángulos en la sala
+        int tim; //Discretización temporal en (milisegundos)
+
+        matEnergia() {
+            ele = 0;
+            tim = 0;
+            energia = NULL;
+        };
+
+
+
+        void init(int e, int t) {
+            ele = e;
+            tim = t;
+            energia = new double* [ele];
+            for (int i = 0; i < ele; i++) {
+                energia[i] = new double[tim];
+                for (int j = 0; j < tim; j++) {
+                    energia[i][j] = 0.0;
+                }
+            }
+        };
+
+        void clear() {
+            ele = 0;
+            tim = 0;
+            delete[] energia;
+            energia = NULL;
+        };
+
+        void normalizar(double mVal) {
+            for (int i = 0; i < ele; i++) {
+                for (int j = 0; j < tim; j++) {
+                    energia[i][j] = energia[i][j] / mVal;
+                }
+            }
+        };
+        double maxEne() {
+            double maxVal;
+            maxVal = 0.0;
+            for (int i = 0; i < ele; i++) {
+                for (int j = 0; j < tim; j++) {
+                    if (maxVal < energia[i][j])
+                        maxVal = energia[i][j];
+                }
+            }
+            return maxVal;
+        };
+
+        void grabarArchivo(char n, int a, int b) {
+            //Creación de archivo con la matriz de energía
+            FILE* Archivo;
+            char buffer[50];
+            sprintf(buffer, "Data/m%c_%i_%i.txt", n, a, b);
+            Archivo = fopen(buffer, "w");
+            for (int j = 0; j < tim; j++) {
+                for (int i = 0; i < ele; i++) {
+                    if (i == ele - 1)
+                        fprintf(Archivo, "%15g\n", energia[i][j]);
+                    else
+                        fprintf(Archivo, "%15g\t", energia[i][j]);
+                }
+            }
+            fclose(Archivo);
+            //Fin de creación de archivo
+        };
+
+
+    };
+
+/*----------------------------------------------------------------------------------*/
+
+
+
+
+
+class matDouble {
+public:
+    double** d;      //Matriz dinámica de doubles
+    int I, J;         //Número de filas y columnas
+
+    matDouble() {
+        I = 0;
+        J = 0;
+        d = NULL;
+    };
+
+    ~matDouble() {
+        clear();
+    };
+
+    void init(int x, int y) {
+        I = x;
+        J = y;
+        d = new double* [I];
+        for (int i = 0; i < I; i++) {
+            d[i] = new double[J];
+            for (int j = 0; j < J; j++) d[i][j] = 0.0;
+        }
+    };
+
+    void clear() {
+        I = 0;
+        J = 0;
+        delete[] d;
+        d = NULL;
+    };
+
+    void grabarArchivo(char c, int a) {
+        //Creación de archivo con la matriz de doubles
+        FILE* Archivo;
+        char buffer[50];
+        sprintf(buffer, "Data/mDou%c_%i.txt", c, a);
+        Archivo = fopen(buffer, "w");
+        for (int j = 0; j < I; j++) {
+            fprintf(Archivo, "%15g\n", d[j]);
+        }
+        fclose(Archivo);
+        //Fin de creación de archivo
+    };
+
+
+
+   
+    };
+
+
+
+class matInt {
+public:
+    int** d;      //Matriz dinámica de doubles
+    int I, J;         //Número de filas y columnas
+
+    matInt() {
+        I = 0;
+        J = 0;
+        d = NULL;
+    };
+
+    ~matInt() {
+        clear();
+    };
+
+    void init(int x, int y) {
+        I = x;
+        J = y;
+        d = new int* [I];
+        for (int i = 0; i < I; i++) {
+            d[i] = new int[J];
+            for (int j = 0; j < J; j++) d[i][j] = 0.0;
+        }
+    };
+
+    void clear() {
+        I = 0;
+        J = 0;
+        delete[] d;
+        d = NULL;
+    };
+
+    void grabarArchivo(char c, int a) {
+        //Creación de archivo con la matriz de enteros
+        FILE* Archivo;
+        char buffer[50];
+        sprintf(buffer, "Data/mInt%c_%i.txt", c, a);
+        Archivo = fopen(buffer, "w");
+        for (int n = 0; n < J; n++) {
+            for (int m = 0; m < I; m++) {
+                if (m == I - 1)
+                    fprintf(Archivo, "%15d\n", d[m][n]);
+                else
+                    fprintf(Archivo, "%15d\t", d[m][n]);
+            }
+        }
+        fclose(Archivo);
+        //Fin de creación de archivo
+    };
+
+
+
 };
 
 #endif

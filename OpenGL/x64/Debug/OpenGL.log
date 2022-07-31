@@ -1,33 +1,35 @@
-﻿  glad.c
-  Source11.cpp
+﻿  Source11.cpp
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL_Stuff\include\learnopengl\shader.h(55,40): warning C4101: 'e': variable local sin referencia
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(303,13): warning C4101: 'P': variable local sin referencia
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(303,16): warning C4101: 'T': variable local sin referencia
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(521,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(132,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(134,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(136,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(140,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(142,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(371,13): warning C4101: 'P': variable local sin referencia
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(371,16): warning C4101: 'T': variable local sin referencia
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(647,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(1288,30): warning C4477: 'fprintf' : la cadena de formato '%15g' requiere un argumento de tipo 'double', pero el argumento variádico 1 tiene el tipo 'double *'
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(1322,51): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(144,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(146,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(148,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(150,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(152,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(164,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(166,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(168,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(172,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(174,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(176,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(180,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(182,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(154,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(156,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(160,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(162,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(164,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(177,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(179,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(181,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(184,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(273,28): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(432,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(433,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(437,19): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(438,19): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(439,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(440,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(449,31): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(186,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(188,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(191,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(193,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(195,57): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(284,28): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(442,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(443,17): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(447,19): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(448,19): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(449,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(450,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(459,31): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(723,28): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
   OpenGL.vcxproj -> C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\x64\Debug\OpenGL.exe
