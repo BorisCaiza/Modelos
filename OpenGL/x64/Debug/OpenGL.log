@@ -3,8 +3,6 @@ C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL_Stuff\include\learnopengl\s
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(371,13): warning C4101: 'P': variable local sin referencia
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(371,16): warning C4101: 'T': variable local sin referencia
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(647,53): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(1288,30): warning C4477: 'fprintf' : la cadena de formato '%15g' requiere un argumento de tipo 'double', pero el argumento variádico 1 tiene el tipo 'double *'
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Header.h(1322,51): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(144,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(146,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(148,62): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
@@ -31,5 +29,5 @@ C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(448,19): warni
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(449,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(450,13): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(459,31): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(723,28): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\OpenGL\Source11.cpp(724,28): warning C4244: '=': conversión de 'double' a 'int'; posible pérdida de datos
   OpenGL.vcxproj -> C:\Users\boris\OneDrive\Escritorio\C++\OpenGL\x64\Debug\OpenGL.exe

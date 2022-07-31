@@ -1284,29 +1284,29 @@ public:
         char buffer[50];
         sprintf(buffer, "Data/mDou%c_%i.txt", c, a);
         Archivo = fopen(buffer, "w");
-        for (int j = 0; j < I; j++) {
-            fprintf(Archivo, "%15g\n", d[j]);
+        for (int j = 0; j < J; j++) {
+            for (int i = 0; i < I; i++) {
+                if (i == I - 1)
+                    fprintf(Archivo, "%15g\n", d[i][j]);
+                else
+                    fprintf(Archivo, "%15g\t", d[i][j]);
+            }
         }
         fclose(Archivo);
         //Fin de creación de archivo
     };
-
-
-
-   
-    };
-
+};
 
 
 class matInt {
 public:
-    int** d;      //Matriz dinámica de doubles
-    int I, J;         //Número de filas y columnas
+    int** i;      //Matriz dinámica de enteros
+    int I, J;      //Número de filas y columnas
 
     matInt() {
         I = 0;
         J = 0;
-        d = NULL;
+        i = NULL;
     };
 
     ~matInt() {
@@ -1316,18 +1316,18 @@ public:
     void init(int x, int y) {
         I = x;
         J = y;
-        d = new int* [I];
-        for (int i = 0; i < I; i++) {
-            d[i] = new int[J];
-            for (int j = 0; j < J; j++) d[i][j] = 0.0;
+        i = new int* [I];
+        for (int m = 0; m < I; m++) {
+            i[m] = new int[J];
+            for (int n = 0; n < J; n++) i[m][n] = 0;
         }
     };
 
     void clear() {
         I = 0;
         J = 0;
-        delete[] d;
-        d = NULL;
+        delete[] i;
+        i = NULL;
     };
 
     void grabarArchivo(char c, int a) {
@@ -1339,17 +1339,14 @@ public:
         for (int n = 0; n < J; n++) {
             for (int m = 0; m < I; m++) {
                 if (m == I - 1)
-                    fprintf(Archivo, "%15d\n", d[m][n]);
+                    fprintf(Archivo, "%15d\n", i[m][n]);
                 else
-                    fprintf(Archivo, "%15d\t", d[m][n]);
+                    fprintf(Archivo, "%15d\t", i[m][n]);
             }
         }
         fclose(Archivo);
         //Fin de creación de archivo
     };
-
-
-
 };
 
 #endif

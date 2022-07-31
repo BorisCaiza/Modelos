@@ -462,7 +462,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 void laodRoom() {
     if (!cuartoCargado) {
-        int nDivTri = 1;
+        int nDivTri = 2;
         r.NewPlanes(6);
 
         r.p[0].NewPoints(4);
@@ -673,7 +673,7 @@ void laodRoom() {
 
             for (int j = 0; j < matDis.J; j++) {
 
-                matTime.d[i][j] = int(1000 * matDis.d[i][j] / V_SON);
+                matTime.i[i][j] = int(1000 * matDis.d[i][j] / V_SON);
 
             }
         }
