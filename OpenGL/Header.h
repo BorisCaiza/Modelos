@@ -302,7 +302,7 @@ public:
         }
     };
 
-    double solidAngle(point b) {
+    double solidAngle(point b) { //desde el trangulo de destino.
         double area = 0.0, d = 0.2;
         triangle t;
         vectorO v0, v1, v2;

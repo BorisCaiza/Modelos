@@ -52,7 +52,7 @@ matEnergia mE; //matriz de energia difusa
 int numTri = 0;
 
 
-matDouble matAngulos;
+matDouble matPorcentaje;
 matDouble matDis;
 matInt matTime;
 
@@ -616,31 +616,44 @@ void laodRoom() {
 
 
         
-        matAngulos.init(numTri, numTri);
+        matPorcentaje.init(numTri, numTri);
         matDis.init(numTri, numTri);
         matTime.init(numTri, numTri);
+        double *areaT;
+        areaT = NULL;
+        areaT = new double[numTri];
 
-      
+        for (int i = 0; i < numTri; i++) {
+            areaT[i] = 0.0;
+        }
 
-      
-        
+
 
         for (int plano1 = 0; plano1 < r.NP; plano1++) {
 
             for (int triangulo1 = 0; triangulo1 < r.p[plano1].NT; triangulo1++) {
                 
                 point baricentro1 = r.p[plano1].t[triangulo1].bc;
-                int id_tr_1 = r.p[plano1].t[triangulo1].ID;
+                int id_tr_1 = r.p[plano1].t[triangulo1].ID; //Triangulo de partida
 
                 for (int plano2 = 0; plano2 < r.NP; plano2++) {
 
                     for (int triangulo2 = 0; triangulo2 < r.p[plano2].NT; triangulo2++) {
 
                         point baricentro2 = r.p[plano2].t[triangulo2].bc;
-                        int id_tr_2 = r.p[plano2].t[triangulo2].ID;
+                        int id_tr_2 = r.p[plano2].t[triangulo2].ID; //Triangulo de llegada
                         
                         if (plano1 != plano2) {
                             matDis.d[id_tr_1][id_tr_2] = baricentro1.distancia(baricentro2);
+                            matTime.i[id_tr_1][id_tr_2] = int(1000 * matDis.d[id_tr_1][id_tr_2] / V_SON);
+                            matPorcentaje.d[id_tr_1][id_tr_2] = r.p[plano2].t[triangulo2].solidAngle(baricentro1);
+                            areaT[id_tr_1] = areaT[id_tr_1] + matPorcentaje.d[id_tr_1][id_tr_2];
+                            
+                        }
+                        else {
+                            matDis.d[id_tr_1][id_tr_2] = 0.0;
+                            matTime.i[id_tr_1][id_tr_2] = 0;
+                            matPorcentaje.d[id_tr_1][id_tr_2] = 0.0;
                         }
                     }
                 }
@@ -648,7 +661,16 @@ void laodRoom() {
             }
         }
 
+        /*/////////////////////////////*/
+
+        for (int i = 0; i < numTri; i++) {
+            for (int j = 0; j < numTri; j++) {
+                matPorcentaje.d[i][j] = matPorcentaje.d[i][j] / areaT[i];
+            }
+        }
+
         /*
+        
         for (int i = 0; i < r.NP; i++) {
 
             for (int j = 0; j < r.p[i].NT; j++) {
@@ -664,11 +686,11 @@ void laodRoom() {
                 }
 
             }
-        }*/
+        }
 
-
+        */
         
-
+        /*
         for (int i = 0; i < matDis.I; i++) {
 
             for (int j = 0; j < matDis.J; j++) {
@@ -676,10 +698,11 @@ void laodRoom() {
                 matTime.i[i][j] = int(1000 * matDis.d[i][j] / V_SON);
 
             }
-        }
+        }*/
 
         matTime.grabarArchivo('t', numTri);
         matDis.grabarArchivo('d',numTri);
+        matPorcentaje.grabarArchivo('p', numTri);
 
      
 
